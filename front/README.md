@@ -1,46 +1,43 @@
-# Getting Started with Create React App
+# Слои
+## Слои стандартизированы во всех проектах FSD. Вам не обязательно использовать все слои, но их названия важны. На данный момент их семь (сверху вниз):
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- App* — всё, благодаря чему приложение запускается — роутинг, точки входа, глобальные стили, провайдеры и т. д.
+- Processes (процессы, устаревший) — сложные межстраничные сценарии.
+- Pages (страницы) — полные страницы или большие части страницы при вложенном роутинге.
+- Widgets (виджеты) — большие самодостаточные куски функциональности или интерфейса, обычно реализующие целый пользовательский сценарий.
+- Features (фичи) — повторно используемые реализации целых фич продукта, то есть действий, приносящих бизнес-ценность пользователю.
+- Entities (сущности) — бизнес-сущности, с которыми работает проект, например user или product.
+- Shared* — переиспользуемый код, особенно когда она отделена от специфики проекта/бизнеса, хотя это не обязательно.
+- * — эти слои, App и Shared, в отличие от других слоев, не имеют слайсов и состоят из сегментов напрямую.
 
-## Available Scripts
+Фишка слоев в том, что модули на одном слое могут знать только о модулях со слоев строго ниже, и как следствие, импортировать только с них.
 
-In the project directory, you can run:
+# Слайсы
+    Дальше идут слайсы, они делят слой по предметной области. Вы можете называть ваши слайсы как угодно, и создавать их сколько угодно. Слайсы помогают не теряться в проекте, потому что группируют тесно связанный по смыслу код.
 
-### `npm start`
+    Слайсы не могут использовать другие слайсы на том же слое, и это обеспечивает сильную связанность кода внутри слайса и слабую сцепленность между слайсами.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# Сегменты
+    Слайсы, а также слои App и Shared, состоят из сегментов, а сегменты группируют код по его назначению. Имена сегментов не зафиксированы стандартом, но существует несколько общепринятых имен для наиболее распространенных целей:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- ui — всё, что связано с отображением: UI-компоненты, форматтеры дат, стили и т.д.
+- api — взаимодействие с бэкендом: функции запросов, типы данных, мапперы.
+- model — модель данных: схемы валидации, интерфейсы, хранилища и бизнес-логика.
+- lib — библиотечный код, который нужен другим модулям этого слайса.
+- config — файлы конфигурации и фиче-флаги.
+Обычно этих сегментов достаточно для большинства слоев, поэтому свои собственные сегменты обычно создают только в Shared или App, но это не жёсткое правило.
 
-### `npm test`
+# Преимущества
+- Однородность
+    Поскольку структура стандартизирована, проекты становятся более единообразными, что облегчает набор новых участников в команду.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Устойчивость к изменениям и рефакторингу
+    Модуль на одном слое не может использовать другие модули на том же слое или слоях выше.
+    Это позволяет вам вносить изолированные правки без непредвиденных последствий для остальной части приложения.
 
-### `npm run build`
+- Контролируемое переиспользование логики
+    В зависимости от уровня вы можете сделать код либо очень переиспользуемым, либо очень локальным.
+    Это сохраняет баланс между соблюдением принципа DRY и практичностью.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- Ориентация на потребности бизнеса и пользователей
+    Приложение разделено на бизнес-домены, и при именовании поощряется использование терминологии бизнеса, чтобы вы могли делать полезную работу в продукте, не вникая полностью во все другие несвязанные части проекта.
